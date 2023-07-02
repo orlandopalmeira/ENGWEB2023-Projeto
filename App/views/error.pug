@@ -1,0 +1,38 @@
+//- {title: String; error: String; admin: Bool; [redirect: URL; redirectButtonText:String]}
+extends layout
+
+block content
+
+    //- Header
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto") Erro
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    .w3-display-middle
+        
+        img.w3-small(src='/images/error2.png' alt='Justiça cega' style="width:300px;height:300px;")
+        h1= title
+        h4= error
+        br
+        - var redirectURL = "/home"
+        - var redirectText = "Voltar à página principal"
+        if redirect && redirectButtonText
+            - var redirectURL = redirect
+            - var redirectText = redirectButtonText
+        a.w3-teal.w3-button.w3-round.smooth-3(href=redirectURL)= redirectText
+
+    footer.w3-container.w3-teal.w3-center.w3-bottom
+        p &copy; 2023 MOP

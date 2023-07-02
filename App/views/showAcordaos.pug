@@ -1,0 +1,121 @@
+extends layout
+//- Esta página serve para mostrar todos os acórdãos referentes a uma pesquisa
+//- Por exemplo, pode mostrar todos os acórdãos do Supremo Tribunal Administrativo
+block content
+    //- modal para mensagems de confirmação e caixas de diálogo de obtenção de input
+    .modal(id="modal") 
+    
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto")= title
+        
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    if acordaos != null && acordaos.length > 0
+        if url
+            .w3-right.w3-margin(style="display: flex; align-items: center;")
+                .w3-margin-right Ordenar por:
+                select.w3-select.w3-border(id="sortParam" style="width: auto")
+                    each param in ["Data do Acordão", "Processo", "Juiz"]
+                        option(value=`sort_by=${param}&order_by=asc`)= param + " (ascendente)"
+                        option(value=`sort_by=${param}&order_by=desc`)= param + " (descendente)"
+
+        .w3-container       
+            each val in acordaos
+                .w3-card.w3-margin-bottom.w3-row.w3-display-container(id=`card${val._id}`)
+                    .w3-twothird
+                        table.w3-striped.w3-padding
+                            tr
+                                th.align-top.w3-left-align.w3-padding.w3-border Processo:
+                                td.w3-border.w3-padding= val.Processo
+                            if val['Data do Acordão']
+                                tr
+                                    th.align-top.w3-left-align.w3-padding.w3-border Data do acórdão:
+                                    td.w3-border.w3-padding= val['Data do Acordão']
+                            if val.Juiz
+                                tr
+                                    th.align-top.w3-left-align.w3-padding.w3-border Juíz:
+                                    td.w3-border.w3-padding= val.Juiz
+                            if val.Descritores.length > 0
+                                tr
+                                    th.align-top.w3-left-align.w3-padding.w3-border Descritores:
+                                    td.w3-border.w3-padding
+                                        each desc in val.Descritores 
+                                            div= desc
+
+                    .w3-third.w3-display-bottomright
+                        .w3-right.w3-margin
+                            if !favoritos.includes(val._id)
+                                button.w3-button.w3-round.w3-large.w3-pink.w3-margin-right(id=`button${val._id}` onclick=`modalInput('${val._id}')` title="Adicionar aos favoritos")
+                                    i.fa-regular.fa-heart(id=`favIcon${val._id}`)
+                            else
+                                button.w3-button.w3-round.w3-large.w3-pink.w3-margin-right(id=`button${val._id}` onclick=`modalConfirmFavourite('${val._id}')` title="Remover dos favoritos")
+                                    i.fa-solid.fa-heart(id=`favIcon${val._id}`)
+                            a.w3-btn.w3-round.w3-large.w3-teal.w3-margin-right(title="Aceder" href='/acordaos/'+val._id)
+                                i.fa-solid.fa-door-open
+                            //-! Funcionalidade exclusiva do administrador
+                            if admin
+                                a.w3-btn.w3-round.w3-large.w3-amber.w3-margin-right(title="Editar" href='/acordaos/edit/'+val._id) 
+                                    i.fa-solid.fa-pencil
+                                button.w3-button.w3-round.w3-large.w3-red(onclick=`modalConfirmAcordao('${val._id}')` title="Eliminar")
+                                    i.fa-solid.fa-trash
+        if paginacao
+            //- Paginação
+            .w3-row.w3-margin-top
+                .w3-third.w3-right-align
+                    if paginacao.pagina == 1
+                        button.w3-button.w3-round-large.w3-teal(type = "button" disabled) &#10094; Página anterior
+                    else
+                        a.w3-button.w3-round-large.w3-teal(href=url + 'page=' + (paginacao.pagina-1)) &#10094; Página anterior
+                //- não é a última página?
+                .w3-third.w3-center.w3-padding
+                    span
+                        //- Primeira Página sempre visivel
+                        if paginacao.pagina != 1
+                            a.w3-button.w3-round(href=url + 'page=1') 1
+                            if paginacao.pagina > 4
+                                label.w3-margin ...
+
+                        //- Páginas anteriores
+                        if paginacao.pagina-2 > 1
+                            a.w3-button.w3-round(href=url + 'page=' + (paginacao.pagina-2)) #{paginacao.pagina-2}
+                        if paginacao.pagina-1 > 1
+                            a.w3-button.w3-round(href=url + 'page=' + (paginacao.pagina-1)) #{paginacao.pagina-1}
+
+                        //- Página atual
+                        a.w3-button.w3-round.w3-gray(href=url + 'page=' + (paginacao.pagina)) #{paginacao.pagina}
+
+                        //- Páginas seguintes
+                        if paginacao.pagina+1 < paginacao.ultimaPagina
+                            a.w3-button.w3-round(href=url + 'page=' + (paginacao.pagina+1)) #{paginacao.pagina+1}
+                        if paginacao.pagina+2 < paginacao.ultimaPagina
+                            a.w3-button.w3-round(href=url + 'page=' + (paginacao.pagina+2)) #{paginacao.pagina+2}
+                        
+                        //- Ultima Página sempre visivel 
+                        if paginacao.pagina <= paginacao.ultimaPagina - 4
+                            label.w3-margin ...
+                        if paginacao.pagina != paginacao.ultimaPagina
+                            a.w3-button.w3-round(href=url + 'page=' + (paginacao.ultimaPagina)) #{paginacao.ultimaPagina}
+                .w3-third.w3-left-align
+                    if paginacao.fim
+                        button.w3-button.w3-round-large.w3-teal(type = "button" disabled) &#10095; Página seguinte
+                    else
+                        a.w3-button.w3-round-large.w3-teal(href=url + 'page=' + (paginacao.pagina+1)) &#10095; Página seguinte
+    else
+        h2.w3-margin-left A sua pesquisa não retornou resultados.
+    footer.w3-margin-top.w3-container.w3-teal.w3-center.w3-padding-16 &copy; 2023 MOP 
+    
+    script(src="/javascripts/pages/showAcordaos.js")
+    script(src="/javascripts/external/select2.min.js")

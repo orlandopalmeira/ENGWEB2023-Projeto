@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    if admin
+        .modal
+            h4 Criar um tribunal
+            form(action='/addTribunal' method='POST')
+                label Sigla
+                input.w3-input(name="_id" required)
+                label Nome do tribunal
+                input.w3-input(name="name" required)
+                button.w3-button.w3-teal.w3-right.w3-margin-top(type="submit") Confirmar
+            button.w3-button.w3-red.w3-margin-top(onclick="$.modal.close()") Cancelar
+    //- Header
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto") Tribunais
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3.w3-dark-grey(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    .w3-container.w3-row.w3-display-container
+        h3.w3-col(style="width: auto") Pode consultar os acórdãos dos seguintes tribunais:
+        if admin
+            button.w3-button.w3-rest.w3-teal.w3-round.w3-display-right.w3-margin-right(onclick="$('.modal').modal()").
+                #[i.fa-solid.fa-plus] Adicionar um tribunal  
+
+    .w3-container
+        ul
+            each val,key in tribunais_dic
+                li
+                    a(href="/acordaos/tribunal/"+key)= val
+                    
+    //- Footer -->
+    footer.w3-container.w3-teal.w3-center.w3-bottom
+        p &copy; 2023 MOP
+        

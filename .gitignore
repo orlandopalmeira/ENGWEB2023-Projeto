@@ -1,0 +1,8 @@
+new_datasets/
+Acordaos/
+statesOfDescriptors/
+dump
+*.mongodb.js
+node_modules
+App/sessions
+shared

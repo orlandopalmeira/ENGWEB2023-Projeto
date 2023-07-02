@@ -1,0 +1,94 @@
+extends layout
+
+block content
+    link(rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css")
+    //- Header
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-col(style="width: auto; margin-left: 35px;")= title
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3.w3-dark-grey(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    //- Main content
+    .w3-container
+        h2.w3-margin-left Consulta de Acórdãos
+        form.w3-container(action="/search" method="GET" id="myForm")
+            .w3-row.w3-margin-bottom.w3-margin-right.w3-margin-left
+                .w3-third
+                    label Processo:
+                    input.w3-input.w3-border(type="text" name="Processo")
+                .w3-third.w3-margin-left
+                    label Tribunal
+                    select.w3-select.w3-border(name="tribunal")
+                        option(value="" disabled selected) Selecione um tribunal
+                        each val, key in tribunais_dic
+                            option(value=key)= val
+
+            .w3-margin
+                label Palavras chave:
+                input.w3-input.w3-border(type="text" name="keywords")
+
+            .w3-margin
+                label Descritores:
+                input.w3-input.w3-border(type="text" name="Descritores" placeholder="Introduza os diferentes descritores separados por ( ; )" oninput="this.value = this.value.toUpperCase()")
+
+            .w3-margin
+                label Juíz:
+                input.w3-input.w3-border(type='text' name='Juiz')
+
+            .w3-row.w3-margin
+                .w3-third
+                    label#dateFieldStart Data do acórdão:
+                    input.w3-input.w3-border(type='date' name='Data do Acordão' id="dateStartField")
+
+                .w3-third.w3-margin-left(style="display: none;" id="dateEndDiv")
+                    label Data final:
+                    input.w3-input.w3-border(type='date' name='data_final' id="dateEndField")
+
+            .w3-text-red.w3-margin(id="badDatesWarning")
+
+            .w3-row.w3-margin
+                label.w3-margin-right Data
+                input.w3-radio.w3-margin-right(onclick='data_final_hide()' value="data" type='radio' name='date_type' checked)
+                label.w3-margin-right Intervalo de datas
+                input.w3-radio(onclick='data_final_show()' value="intervaloDatas" type='radio' name='date_type')
+
+            button.w3-button.w3-large.w3-round-large.w3-teal.w3-margin.transition(type="submit" id="btnSubmit") Pesquisar
+
+        hr
+        //- Histórico dos últimos acórdãos visitados
+        if historico && historico.length > 0 
+            h2.w3-margin-left Últimos acórdãos visitados
+            .w3-container
+                each acordao in historico
+                    .w3-display-container.w3-card.w3-margin-bottom
+                        table.w3-striped.w3-padding
+                            tr
+                                th.align-top.w3-left-align.w3-padding.w3-border Processo:
+                                td.w3-border.w3-padding= acordao.Processo
+                            tr
+                                th.align-top.w3-left-align.w3-padding.w3-border Juíz:
+                                td.w3-border.w3-padding= acordao.Juiz
+                            tr
+                                th.align-top.w3-left-align.w3-padding.w3-border Descritores:
+                                td.w3-border.w3-padding
+                                    each descritor in acordao.Descritores 
+                                        div= descritor
+                        .w3-display-bottomright.w3-margin-right
+                            a.w3-btn.w3-round.w3-large.w3-teal.w3-right.w3-margin-bottom.w3-margin-right(href='/acordaos/'+acordao._id) Revisitar
+
+    footer.w3-container.w3-teal.w3-center.w3-margin-top
+        p &copy; 2023 MOP
+
+    script(src="/javascripts/pages/home.js")

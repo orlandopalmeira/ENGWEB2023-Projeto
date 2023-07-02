@@ -1,0 +1,19 @@
+//- {title:str , ERRO:str(mensagem de erro) , registo:Obj(objeto onde ocorreu o erro, OPCIONAL)}
+extends layout
+
+block content
+    header.w3-display-container
+        h1.w3-red.w3-padding.w3-center.w3-card-4= title
+        .w3-card.w3-margin.w3-padding.w3-light-gray
+            p.w3-large= ERRO
+        if registo != null
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                p.w3-padding.w3-large Registo em que ocorreu o problema:
+                pre.w3-padding= JSON.stringify(registo,null,4)
+        br
+        .w3-container.w3-row
+            a.w3-btn.w3-padding.w3-margin.w3-large.w3-teal(href="/acordaos/add") Tentar novamente
+            a.w3-btn.w3-padding.w3-margin.w3-large.w3-teal.w3-right(href="/home") Voltar para a Home
+
+    br
+    br

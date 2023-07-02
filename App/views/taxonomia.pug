@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    header.w3-teal.w3-row.w3-display-container(id="header")
+        h1.w3-margin-left.w3-col(style="width: auto")= title
+        
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3.w3-dark-grey(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    .w3-bar.w3-center.w3-grey(id="alfabeto")
+        each _, letra in taxonomia
+            button.w3-button(id="goto" + letra onclick=`goto('${letra}')`) #[b= letra]
+        button.w3-button(id="toTop") #[b Topo]
+
+    .w3-container
+        each classes, letra in taxonomia
+            div(id=letra)
+                h2= letra
+                each descritores, classe in classes
+                    button.w3-button.w3-block.w3-left-align(style="background-color: #c3c3c3" onclick=`toggleAccordion('${classe}')`) #[i.fa-solid.fa-chevron-right.fa-xs(id="icon" + classe)] &nbsp; #{classe}
+                    .w3-hide(id=classe)
+                        each descritor in descritores
+                            a.w3-button.w3-block.w3-left-align.w3-light-grey(href=`/search?Descritores=${descritor}`)  &nbsp; &nbsp; - &nbsp; #{descritor}
+
+
+
+    footer.w3-margin-top.w3-container.w3-teal.w3-center.w3-padding-16 &copy; 2023 MOP 
+    script(src='./javascripts/pages/taxonomia.js')

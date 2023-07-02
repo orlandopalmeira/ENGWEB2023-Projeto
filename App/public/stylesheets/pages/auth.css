@@ -1,0 +1,85 @@
+body {
+  background-color: #9f9da7;
+  font-family: Verdana,sans-serif;
+  color: #2b3e51;
+}
+
+h2 {
+  font-weight: 300;
+  text-align: center;
+}
+
+p {
+  position: relative;
+}
+
+#login-form-div {
+  background-color: #fff;
+  width: 35%;
+  max-width: 35%;
+  margin: 30px auto;
+  text-align: center;
+  padding: 20px 0 0 0;
+  border-radius: 4px;
+  box-shadow: 0px 30px 50px 0px rgba(0, 0, 0, 0.2);
+}
+
+#login-form {
+  padding: 0 60px;
+}
+
+input {
+  /* display: block;
+  box-sizing: border-box; */
+  width: 100%;
+  font-size: 1.1rem; /*Acerca da font-size não sei se esta é boa */
+  outline: none;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 4px; 
+  padding-left: 12px;
+  transition: all 0.6s ease; 
+  border: 2px solid;
+}
+
+/* Settings para quando a caixa de input estiver selecionada */
+input:focus {
+  border-color: rgb(7, 182, 182);
+}
+
+.input-text {
+  position: relative;
+  padding-left: 40px; /* Make room for the icons */
+}
+
+/* Aplica estas settings a todos os icones, exceto os que têm a classe pw-hide */
+.input-text i:not(.pw-hide) {
+  position: absolute;
+  left: 0;
+  top: 50%;
+}
+
+/* Icone de eye-slash (tem classe .pw-hide) */
+.input-text i.pw-hide{
+  position: absolute;
+  right: 0;
+  top: 50%;
+  padding-right: 12px; 
+  cursor: pointer;
+}
+
+#create-account-wrap {
+  background-color: #eeedf1;
+  color: #8a8b8e;
+  font-size: 14px;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 0 0 4px 4px;
+}
+
+#warning {
+  border: 2px solid rgb(232, 10, 10);
+  background-color: rgb(247, 181, 181);
+  margin: 0px 40px 35px 40px;
+  font-weight: bold;
+}

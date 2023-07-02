@@ -1,0 +1,80 @@
+extends layout
+
+block content
+    //- Modal: o gatilho deste modal é o botão "Adicionar campo"
+    .modal(id="newFieldModal")
+        h4 Insira o novo campo:
+        //-input.w3-input.w3-border(type="text" id="newFieldName" placeholder="Nome do novo campo")
+        select.w3-border.select2(id="newFieldName" style="width:100%")
+        br
+        .w3-text-red(id="modalWarning")
+        br
+        button.w3-margin-top.w3-button.w3-round.w3-black(type="button" onclick="addField()") Inserir
+
+    //- Header
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto") Editar acordão
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    .w3-container.w3-padding
+        form(action="/acordaos/edit/"+acordao._id method="POST")
+            each val,key in acordao
+                if key == '_id'
+                    label ID
+                    input.w3-input.w3-border(type="text" name=key value=val readonly)
+                else if key == 'Descritores' 
+                    if val.length > 0
+                        label= key
+                        input(type="hidden" id="last_id" value=val.length)
+                        .w3-container(id="descritoresDiv")
+                            each i in Array.from({length: val.length}, (_, i) => i + 1)
+                                .w3-row(id="descritor"+i)
+                                    input.w3-col.w3-input.w3-border.w3-margin-bottom(type="text" style="width: 95%" name=key value=val[i-1] oninput="this.value = this.value.toUpperCase()")
+                                    button.w3-margin-left.w3-rest.w3-button.w3-red.w3-round(type="button" onclick="removeDescriptor('" + "descritor"+i + "')") &times;
+
+                        button.w3-margin-left.w3-margin-bottom.w3-rest.w3-button.w3-teal.w3-round(type="button" onclick="addDescriptor()") Adicionar descritor
+                        br
+                else if key == 'tribunal'
+                    label Tribunal
+                    select.w3-select(name=key)
+                        each trib, abrev in tribunais
+                            if abrev == val
+                                option(value=abrev selected)= trib
+                            else
+                                option(value=abrev)= trib
+                else if /^Data/.test(key)
+                    label= key
+                    input.w3-input.w3-border(type="date" name=key value=val)
+                else if val && val.length >= 100
+                    label= key
+                    textarea.w3-input.w3-border(style="resize: none" name=key rows="20")= val
+                else
+                    label= key
+                    input.w3-input.w3-border(type="text" name=key value=val)
+
+            div(id="newFieldsDiv")
+            button.w3-margin-top.w3-rest.w3-button.w3-teal.w3-round(type="button" onclick="showNewFieldModal()") Adicionar campo
+
+            br
+
+            .w3-center.w3-margin
+                button.w3-margin-bottom.w3-button.w3-round-large.w3-xlarge.w3-indigo.transition(type="submit") Confirmar alterações
+
+    footer.w3-container.w3-teal.w3-center
+        p &copy; 2023 MOP
+
+    script(src="/javascripts/pages/editAcordao.js")
+    script(src="/javascripts/external/select2.min.js")

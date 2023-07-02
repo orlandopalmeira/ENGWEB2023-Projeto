@@ -1,0 +1,54 @@
+.align-top {
+    vertical-align: top;
+}
+.align-mid {
+    text-align: center;
+    /* vertical-align: middle; */
+}
+.center {
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.caps {
+    text-transform: uppercase;
+}
+.fixed-width-100 {
+    width: 110px;
+}
+
+/* Show more button */
+.button-plain-simple {
+    background: none;
+    border: none;
+    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    text-decoration: underline;
+    margin-right: 30px;
+    /* padding: 4px 8px; */
+}
+
+.button-plain-simple:hover {
+    color: white;
+    background-color: teal;
+    transition: 0.2s;
+}
+
+/* To make transitions smoother */
+.transition {
+    transition: 0.1s;
+}
+
+.smooth-3 {
+    transition: 0.3s;
+}
+
+#btnFavourite {
+    padding-top: 50px;
+    /* translate: 50px; */
+}

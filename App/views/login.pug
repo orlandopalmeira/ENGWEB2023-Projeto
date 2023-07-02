@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/stylesheets/pages/auth.css')
+
+    div(id = "login-form-div")
+        h2 Login
+        form(id="login-form" action="/login" method="post")
+            p
+                .input-text(title="Email")
+                    i.fa-solid.fa-envelope.fa-lg
+                    if loginData
+                        input(name="email" type="text" placeholder="Email" value=loginData.email autofocus required)
+                    else
+                        input(name="email" type="text" placeholder="Email" autofocus required)
+
+            p
+                .input-text(title="Password")
+                    i.fa-solid.fa-lock.fa-lg
+                    if loginData
+                        input.password(name="password" type="password" value=loginData.password placeholder="Password" required)
+                    else
+                        input.password(name="password" type="password" placeholder="Password" required)
+                    i.pw-hide.fa-solid.fa-eye-slash.fa-lg(title="Password visibility")
+            p
+                button.w3-button.w3-teal.w3-round.w3-hover.w3-margin(type="submit") Iniciar sessão
+
+        if warning
+            div(id="warning")
+                p= warning
+
+        div(id="create-account-wrap")
+            p Não possui conta? 
+                a(href="/signup") Registar Conta
+
+    footer.w3-container.w3-teal.w3-center.w3-bottom
+        p &copy; 2023 MOP
+
+    script(src="/javascripts/pages/login.js")
+

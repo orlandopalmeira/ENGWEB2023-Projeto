@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/stylesheets/pages/auth.css')
+
+    .modal(id="modal")
+        h4.w3-center A sua conta foi criada com sucesso!
+        br
+        .w3-margin.w3-center
+            i.fa-regular.fa-circle-check.fa-2xl(style="color: #2ce713; transform: scale(2);")   
+        br        
+        p Será redirecionado para a página principal dentro de poucos segundos!
+
+    div.w3-padding(id = "login-form-div")
+        h2 Criar Conta de Administrador
+            i.fa-solid.fa-shield.fa-lg.w3-padding-small
+        form(id="login-form" action="/signupAdmin" method="post")
+            p
+                .input-text(title="Username")
+                    i.fa-solid.fa-user.fa-lg
+                    input(name="username" type="text" placeholder="Username" autofocus required)
+            p
+                .input-text(title="Nome")
+                    i.fa-solid.fa-address-card.fa-lg
+                    input(name="name" type="text" placeholder="Nome" required)
+            p
+                .input-text(title="Email")
+                    i.fa-solid.fa-envelope.fa-lg
+                    input(name="email" type="text" placeholder="Email" required)
+            p
+                .input-text(title="Password")
+                    i.fa-solid.fa-lock.fa-lg
+                    input.password(name="password" type="password" placeholder="Password" required)
+                    i.pw-hide.fa-solid.fa-eye-slash.fa-lg(title="Password visibility")
+            p
+            button.w3-button.w3-teal.w3-round.w3-hover.w3-margin(id="formSubmit" type="submit") Criar conta
+        
+        div(id="warning" style="display:none;")
+
+    footer.w3-container.w3-teal.w3-center.w3-bottom
+        p &copy; 2023 MOP
+
+    script(src="/javascripts/pages/signupADM.js")

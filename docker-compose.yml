@@ -1,0 +1,51 @@
+version: "3"
+services:
+  acordaosinterface:
+    container_name: acordaosinterface
+    build: ./App
+    # restart: always
+    environment:
+      - API=http://acordaosapi:7778/api
+      - AUTH=http://acordaosauth:7779/users
+    ports:
+      - "7777:7777"
+    depends_on: # cria um dependência entre serviços, significa que este serviço só inicia depois de iniciar o mongo
+      - acordaosapi
+      - acordaosauth
+    networks:
+      - acordaosnet
+  
+  acordaosapi:
+    container_name: acordaosapi
+    build: ./API
+    # restart: always
+    environment:
+      - MONGODB_URL=mongodb://mongoserv/ACORDAOS
+    depends_on:
+      - mongoserv
+    networks:
+      - acordaosnet
+    
+  acordaosauth:
+    container_name: acordaosauth
+    build: ./Auth
+    # restart: always
+    environment:
+      - MONGODB_URL=mongodb://mongoserv/ACORDAOS
+    depends_on:
+      - mongoserv
+    networks:
+      - acordaosnet
+
+  mongoserv:
+    container_name: dbacordaos
+    image: mongo # vai buscar a imagem oficial do mongo
+    networks:
+      - acordaosnet
+    volumes:
+      - './mongodata:/data/db'
+
+networks:
+  acordaosnet:
+    name: acordaosnet
+    driver: bridge

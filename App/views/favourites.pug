@@ -1,0 +1,71 @@
+extends layout
+//- Esta página serve para mostrar todos os favoritos de um certo utilizador
+block content
+
+    //- modal para confirmações e outras coisas
+    .modal(id="modal") 
+
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto")= title 
+
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3.w3-dark-grey(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    .w3-container.w3-margin
+        if favoritos.length > 0
+            each favorito in favoritos
+                .w3-container.w3-card.w3-margin-bottom.w3-padding-16(id=`favourite${favorito._id}`)
+                    .w3-row
+                        .w3-twothird
+                            form(action="/editFavourite" id="form" + favorito._id method="POST")
+                                input.w3.input(type="hidden" name="idAcordao" value=favorito._id readonly)
+                                //- actual form
+                                label.w3-margin-right Processo:
+                                input.w3-margin-right(type="text" value=favorito.Processo style="width:250px" readonly)
+
+                                label.w3-margin Juiz:
+                                input.w3-margin-right(type="text" value=favorito.Juiz style="width:280px" readonly)
+
+                                if favorito["Data do Acordão"]
+                                    label.w3-margin Data do Acordão:
+                                    input.w3-margin-right(type="text" value=favorito["Data do Acordão"] readonly)
+
+                                p
+
+                                label.w3-margin-right Descrição:
+                                textarea.w3-input.w3-border(id="textArea"+favorito._id name="descricao" style="resize: none" rows="3" disabled)= favorito.descricao
+
+                                input.w3-button.w3-round.w3-teal.w3-margin-top.confirmButton(id=`confirmButton${favorito._id}` type="submit" value="Confirmar" style="display: none")
+
+                        .w3-third.align-mid(id="btnFavourite")
+                            a(href="/acordaos/"+favorito._id)
+                                button.w3-button.w3-teal.w3-round.w3-margin.fixed-width-100
+                                    i.fa-solid.fa-door-open
+                                    |    Visitar
+
+                            button.w3-button.w3-amber.w3-round.w3-margin.fixed-width-100(onclick=`enableEdition('${favorito._id}')` title="Alterar descrição")
+                                i.fa-solid.fa-pencil
+                                |    Editar
+
+                            button.w3-button.w3-red.w3-round.w3-margin.fixed-width-100(onclick=`modalConfirmDeleteFavourite('${favorito._id}')`)
+                                i.fa-solid.fa-heart-crack
+                                |    Remover
+        else
+            h2.w3-margin Ainda não tem favoritos!
+
+
+    footer.w3-container.w3-teal.w3-center.w3-padding-16 &copy; 2023 MOP 
+    script(src="/javascripts/pages/favourites.js")
+            

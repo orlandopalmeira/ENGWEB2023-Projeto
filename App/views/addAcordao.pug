@@ -1,0 +1,117 @@
+extends layout
+
+block content
+    //- Modal para criar um novo campo
+    .modal(id="newFieldModal")
+        h4 Insira o novo campo:
+        select.w3-border.select2(id="newFieldName" style="width:100%")
+        br
+        .w3-text-red(id="modalWarning")
+        br
+        button.w3-margin-top.w3-button.w3-round.w3-black(type="button" onclick="addField()") Inserir
+
+
+    //- Header
+    header.w3-teal.w3-row.w3-display-container
+        h1.w3-margin-left.w3-col(style="width: auto") Adicionar acórdão
+        //- Navigation Bar
+        .w3-bar.w3-teal.w3-display-right.w3-margin-right.w3-round(style="width: auto")
+            a.w3-bar-item.w3-button.smooth-3(href="/home") Home
+            a.w3-bar-item.w3-button.smooth-3(href="/tribunais") Tribunais
+            a.w3-bar-item.w3-button.smooth-3(href="/taxonomia") Taxonomia
+            a.w3-bar-item.w3-button.smooth-3(href="/favoritos") Favoritos
+            a.w3-bar-item.w3-button.smooth-3(href="/profile") Perfil
+            if admin
+                a.w3-bar-item.w3-button.smooth-3(href="/acordaos/add") Adicionar acórdãos
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+                a.w3-bar-item.w3-button.smooth-3(href="/signupAdmin") Criar ADM
+                    i.fa-solid.fa-shield.fa-lg.w3-padding-small
+            a.w3-bar-item.w3-button.smooth-3(href="/logout") Logout
+                i.fa-solid.fa-right-from-bracket.fa-lg.w3-padding-small
+
+    //- Seleção de tipo de submissão
+    .w3-padding
+        h3 Selecione o tipo de submissão
+        .w3-container
+            table(style="line-height: 30px")
+                tr
+                  td
+                    label Manual
+                  td
+                    input.w3-radio.w3-margin-left(id="manualButton" type="radio" name="tipoSubmissao" onclick="manualInput()" value="manual" checked) 
+                tr
+                  td
+                    label Por ficheiro
+                  td
+                    input.w3-radio.w3-margin-left(id="fileButton" type="radio" name="tipoSubmissao" onclick="fileInput()" value="ficheiro") 
+    hr
+
+    //- campos obrigatorios: Processo, tribunal, Juiz, Data do Acórdão, Descritores
+    //- Div para submissão manual
+    .w3-container(id="manualInputDiv" style="display: block")
+        h3 Preencha o formulários com os dados do acórdão
+        form(action="/acordaos/add" method="POST")
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                label.w3-large Processo
+                input.w3-input.w3-border(type="text" name="Processo" required)
+
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                label.w3-large Tribunal
+                select.w3-select.w3-border.w3-white(name="tribunal" required)
+                    option(value="" disabled selected) Selecione um tribunal
+                    each trib,abrev in tribunais
+                        option(value=abrev)= trib
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                label.w3-large Juiz
+                input.w3-input.w3-border(type="text" name="Juiz" required)
+
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                label.w3-large Data do Acórdão
+                input.w3-input.w3-border(type="date" id="dataAcordaoField" name="Data do Acordão" required)
+
+            .w3-card.w3-margin.w3-padding.w3-light-gray
+                label.w3-large Descritores
+                .w3-container(id="descritoresDiv")
+                    .w3-row(id="descritor1")
+                        input.w3-col.w3-input.w3-border.w3-margin-bottom(style="width: 95%" type="text" name="Descritores" oninput="this.value = this.value.toUpperCase()" required)
+                        button.w3.rest.w3-margin-left.w3-rest.w3-button.w3-red.w3-round(type="button" onclick="removeDescriptor('descritor1')") &times;
+
+                button.w3-button.w3-teal.w3-round.w3-margin-left.w3-margin-bottom(type="button" onclick="addDescriptor()") Adicionar descritor
+            #newFieldsDiv
+
+            button.w3-button.w3-teal.w3-round.w3-margin-bottom.w3-margin-top(type="button" onclick="showNewFieldModal()") Adicionar campo
+            br
+            div.w3-margin-top
+                button.w3-button.w3-xxlarge.center.w3-indigo.w3-round.w3-margin.transition(type="submit") Confirmar
+        
+
+    //- Div para submissão via ficheiro
+    .w3-container(id="fileInputDiv" style="display: none")
+        h3 Escolha o ficheiro que pretende submeter
+
+
+        form(action="/acordaos/addFromFile" method="POST" enctype="multipart/form-data")
+            input.w3-input.w3-border(type="file" name="myFile" accept=".json" required)
+            button.w3-button.w3-large.w3-teal.w3-round.w3-margin.transition(type="submit") Confirmar
+        
+        hr
+
+        button.w3-btn.w3-round.w3-pale-green.w3-margin.w3-center(type="button" onclick="instructionShow()") Instruções
+            i.fa-solid.fa-circle-info.fa-lg.w3-margin-left
+
+        .w3-container.w3-panel.w3-pale-green(id="instructionDiv" style="display: none")
+            p O ficheiro submetido deverá ser um dicionário ou uma lista de dicionários em formato JSON com os seguintes campos obrigatórios: 
+            ol 
+                li Processo
+                li tribunal
+                li Juiz
+                li Data do Acordão
+                li Descritores
+            p O campo _id é reservado e não pode ser um dos campos inseridos!
+
+    footer.w3-container.w3-teal.w3-center
+        p &copy; 2023 MOP
+
+
+    script(src="/javascripts/pages/addAcordao.js")
+    script(src="/javascripts/external/select2.min.js")

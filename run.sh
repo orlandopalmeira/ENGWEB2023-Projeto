@@ -1,5 +1,7 @@
 #!/bin/bash
-# Script para automatização da execução dos três serviços.
+# Script para automatização da execução dos três serviços directamente no computador local.
+# Esta script só funciona se se tiver a base de dados directamente no computador. 
+# É mais aconselhável utilizar a script que arranca a aplicação no docker (./runDocker.sh)
 
 sudo systemctl start mongod # arranca o servidor do mongodb
 

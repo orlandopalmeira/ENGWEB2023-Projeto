@@ -3,16 +3,20 @@
 
 mongodata="./mongodata" # volume do container (Docker) do mongodb 
 mongodatazip="./mongodata.zip" # zip que contém a base de dados
+chunks="chunks/chunk_*" # ficheiros separados que compõe o zip da base de dados (foi necessário partir o zip uma vez que o github não permite ficheiros grandes)
 
 if [ -d "$mongodata" ]; then
     sudo echo "Directoria '$mongodata' existe."
     echo "Atenção: Se a directoria '$mongodata' tiver conteúdo indevido, a aplicação não irá funcionar conforme o esperado."
     echo "Se ocorrer algum erro, tente eliminar a directoria '$mongodata' (sudo rm -r $mongodata/) e volte a correr esta script."
 else
-    sudo echo "$mongodatazip não descompactado."
+    sudo echo "A construir o zip $mongodatazip"
+    cat $chunks > "mongodata.zip"
     echo "A descompactar '$mongodatazip'."
     sudo unzip "$mongodatazip"
     echo "$mongodatazip descompactado."
+    sudo rm "$mongodatazip"
+    echo "$mongodatazip apagado."
 fi
 
 # Iniciar o docker

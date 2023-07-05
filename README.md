@@ -286,6 +286,10 @@ Como trabalho futuro, há sempre possibilidade para expandir o conjunto de *feat
 
 ### **Anexo 1 - Colocação da aplicação em funcionamento (Docker)**
 
+#### **Com uma *script* automática**
+Executar o comando: `./runDocker.sh`
+
+#### **Com a pasta** `mongodata` existente 
 Na directoria principal do projecto, é possível encontrar o ficheiro `docker-compose` destinado à criação dos *containers* dos quatro servidores da aplicação (Base de Dados, API de Dados, servidor de Autenticação e servidor de Interface), bem como a directoria "mongodata", que consiste num volume utilizado pelo *container* responsável pela execução do servidor MongoDB e que contém a base de dados.
 
 Passos para colocar a aplicação em funcionamento no Docker.

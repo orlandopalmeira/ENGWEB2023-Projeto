@@ -1,4 +1,4 @@
-# Relatório de Engenharia Web - Base de Dados de Acordãos
+# Relatório de Engenharia Web - Base de Dados de Acordãos (Nota: 20/20)
 
 ## **Introdução**
 Este relatório surge no âmbito da Unidade Curricular de Engenharia Web, em que nos foi proposto a concepção de uma aplicação *Web*. 

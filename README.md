@@ -1,9 +1,9 @@
 # Relatório de Engenharia Web - Base de Dados de Acordãos (Nota: 20/20)
 
 ## **Autores**
-Miguel Silva Pinto, A96106
-Orlando José da Cunha Palmeira, A97755
-Pedro Miguel Castilho Martins, A97613
+Miguel Silva Pinto, A96106 <br/>
+Orlando José da Cunha Palmeira, A97755<br/>
+Pedro Miguel Castilho Martins, A97613<br/>
 
 ## **Introdução**
 Este relatório surge no âmbito da Unidade Curricular de Engenharia Web, em que nos foi proposto a concepção de uma aplicação *Web*. 
